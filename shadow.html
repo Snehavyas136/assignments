@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Colorful Box Shadows</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 40px;
+      justify-content: center;
+    }
+
+    .card {
+      width: 150px;
+      height: 150px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .shadow-60 {
+      box-shadow:
+        0px 0px 0px 2px blue,
+        5px 5px 0px 2px green,
+        10px 10px 0px 2px orange,
+        15px 15px 0px 2px red;
+    }
+
+    .shadow-61 {
+      box-shadow:
+        0px 0px 0px 2px red,
+        5px 5px 0px 2px orange,
+        10px 10px 0px 2px yellow,
+        15px 15px 0px 2px green,
+        20px 20px 0px 2px blue;
+    }
+
+    .label {
+      text-align: center;
+      font-size: 14px;
+      color: #333;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card shadow-60">
+    <div>#60</div>
+    <div class="label">by Fossheim</div>
+  </div>
+
+  <div class="card shadow-61">
+    <div>#61</div>
+    <div class="label">by Fossheim</div>
+  </div>
+
+</body>
