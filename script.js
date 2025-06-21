@@ -1,85 +1,40 @@
-const form = document.getElementById('form');
-const descInput = document.getElementById('description');
-const amountInput = document.getElementById('amount');
-const list = document.getElementById('transaction-list');
-const totalDisplay = document.getElementById('total');
-const incomeDisplay = document.getElementById('income');
-const expenseDisplay = document.getElementById('expense');
+const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your OpenWeatherMap API key
 
-let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+async function getWeather() {
+  const city = document.getElementById('cityInput').value;
+  const weatherInfo = document.getElementById('weatherInfo');
+  const errorMessage = document.getElementById('errorMessage');
 
-function addTransaction(e) {
-  e.preventDefault();
+  if (!city) {
+    errorMessage.textContent = 'Please enter a city name.';
+    weatherInfo.classList.add('hidden');
+    return;
+  }
 
-  const desc = descInput.value.trim();
-  const amount = +amountInput.value;
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-  if (!desc || isNaN(amount)) return;
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
 
-  const transaction = {
-    id: Date.now(),
-    description: desc,
-    amount: amount
-  };
+    if (response.ok) {
+      document.getElementById('cityName').textContent = data.name;
+      document.getElementById('weatherCondition').textContent = data.weather[0].main;
+      document.getElementById('temperature').textContent = Math.round(data.main.temp);
+      document.getElementById('humidity').textContent = data.main.humidity;
+      document.getElementById('windSpeed').textContent = data.wind.speed;
 
-  transactions.push(transaction);
-  updateLocalStorage();
-  renderTransactions();
-  updateSummary();
+      const iconCode = data.weather[0].icon;
+      document.getElementById('weatherIcon').src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
-  form.reset();
+      errorMessage.textContent = '';
+      weatherInfo.classList.remove('hidden');
+    } else {
+      errorMessage.textContent = 'City not found. Please try again.';
+      weatherInfo.classList.add('hidden');
+    }
+  } catch (error) {
+    errorMessage.textContent = 'An error occurred. Please try again.';
+    weatherInfo.classList.add('hidden');
+  }
 }
-
-function deleteTransaction(id) {
-  transactions = transactions.filter(t => t.id !== id);
-  updateLocalStorage();
-  renderTransactions();
-  updateSummary();
-}
-
-function renderTransactions() {
-  list.innerHTML = '';
-  transactions.forEach(addTransactionDOM);
-}
-
-function addTransactionDOM(txn) {
-  const sign = txn.amount < 0 ? '-' : '+';
-  const item = document.createElement('li');
-  item.classList.add(txn.amount < 0 ? 'minus' : 'plus');
-
-  item.innerHTML = `
-    ${txn.description} <span>${sign}$${Math.abs(txn.amount).toFixed(2)}</span>
-    <button onclick="deleteTransaction(${txn.id})">❌</button>
-  `;
-
-  list.appendChild(item);
-}
-
-// Update balance, income, and expense
-function updateSummary() {
-  const amounts = transactions.map(t => t.amount);
-  const total = amounts.reduce((acc, val) => acc + val, 0).toFixed(2);
-  const income = amounts.filter(a => a > 0).reduce((acc, val) => acc + val, 0).toFixed(2);
-  const expense = amounts.filter(a => a < 0).reduce((acc, val) => acc + val, 0).toFixed(2);
-
-  totalDisplay.innerText = `$${total}`;
-  incomeDisplay.innerText = `+$${income}`;
-  expenseDisplay.innerText = `-$${Math.abs(expense)}`;
-}
-
-// Save transactions to localStorage
-function updateLocalStorage() {
-  localStorage.setItem('transactions', JSON.stringify(transactions));
-}
-
-// Init App
-function init() {
-  renderTransactions();
-  updateSummary();
-}
-
-// Event Listeners
-form.addEventListener('submit', addTransaction);
-
-// Load
-init();

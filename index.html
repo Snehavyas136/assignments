@@ -1,40 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Expense Tracker</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h2> Expense Tracker</h2>
-<div id="balance">
-      <h3>Your Balance</h3>
-      <h1 id="total">1.00</h1>
+  <div class="weather-container">
+    <h1>Weather App</h1>
+    <input type="text" id="cityInput" placeholder="Enter city name" />
+    <button onclick="getWeather()">Search</button>
+    <div id="weatherInfo" class="hidden">
+      <h2 id="cityName"></h2>
+      <img id="weatherIcon" alt="Weather Icon" />
+      <p><strong>Condition:</strong> <span id="weatherCondition"></span></p>
+      <p><strong>Temperature:</strong> <span id="temperature"></span>°C</p>
+      <p><strong>Humidity:</strong> <span id="humidity"></span>%</p>
+      <p><strong>Wind Speed:</strong> <span id="windSpeed"></span> km/h</p>
     </div>
-
-    <div class="summary">
-      <div>
-        <h4>Income</h4>
-        <p id="income" class="money plus">+1.00</p>
-      </div>
-      <div>
-        <h4>Expense</h4>
-        <p id="expense" class="money minus">-1.00</p>
-      </div>
-    </div>
-
-    <h3>Transactions</h3>
-    <ul id="transaction-list" class="list"></ul>
-
-    <h3>Add New Transaction</h3>
-    <form id="form">
-      <input type="text" id="description" placeholder="Enter description" required />
-      <input type="number" id="amount" placeholder="Enter amount (+/-)" required />
-      <button type="submit">Add Transaction</button>
-    </form>
+    <p id="errorMessage" class="error"></p>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
